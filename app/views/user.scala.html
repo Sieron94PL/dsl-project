@@ -1,23 +1,14 @@
-@(userForm: Form[models.UserFormData],users : Seq[models.User])(implicit request: RequestHeader,messages : Messages)
+@import scala.collection.mutable
+@(userForm: Form[models.UserFormData], errors: mutable.HashMap[String, String])(implicit request: RequestHeader, messages: Messages)
 @main(Messages("app.name")) {
-    @request.flash.get(messages("flash.success")).map { msg =>
-        <div class="col-md-6 col-md-offset-3 alert alert-danger alert-error">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>@msg</strong>
-        </div>
-    }
-    @request.flash.get(messages("flash.error")).map { msg =>
-        <div class="col-md-6 col-md-offset-3 alert alert-danger alert-error">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>@msg</strong>
-        </div>
-    }
     <form id="user-data-form" role="form" action='@routes.UserController.addUser()' method="post" class="form-horizontal" align="center" autocomplete="off">
 
         <fieldset class="user-fieldset">
-
             <div class="user-form">
-                <label class="form-title" style="color: #F8741B; font-size: 22px;font-weight: bold; text-decoration:none">@messages("page.title")</label>
+                <label class="form-title" style="color: #F8741B;
+                    font-size: 22px;
+                    font-weight: bold;
+                    text-decoration: none">@messages("page.title")</label>
             </div>
             <br/>
             <table align="center" cellspacing="20">
@@ -37,7 +28,7 @@
                             <div class="controls col-xs-offset-3 col-xs-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                    <input type="text" id="firstName" name="firstName" value="" placeholder="First Name" class="form-control input-lg" required>
+                                    <input type="text" id="firstName" name="firstName" value="@userForm("firstName").value" placeholder="First Name" class="form-control input-lg" required>
                                 </div>
                             </div>
                         </div>
@@ -59,29 +50,7 @@
                             <div class="controls col-xs-offset-3 col-xs-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                    <input type="text" id="lastName" name="lastName" value="" placeholder="Last Name" class="form-control input-lg" required>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left">
-                        <div class="user-form" id="mobile_field_label">
-                            <div class="controls col-xs-offset-3 col-xs-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                    <strong>@messages("mobile")</strong> :
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td align="center">
-                        <div class="user-form" id="mobile_field_value">
-                            <div class="controls col-xs-offset-3 col-xs-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                    <input type="tel" id="mobile" name="mobile" placeholder="Mobile" class="form-control input-lg" required>
+                                    <input type="text" id="lastName" name="lastName" value="@userForm("lastName").value" placeholder="Last Name" class="form-control input-lg" required>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +72,61 @@
                             <div class="controls col-xs-offset-3 col-xs-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
-                                    <input type="email" id="email" name="email" placeholder="Email" class="form-control input-lg" required>
+                                    <input type="email" id="email" name="email" value="@userForm("email").value" placeholder="Email" class="form-control input-lg" required>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    @if(errors.size != 0) {
+                        @if(errors.get("emailError") != null) {
+                            <td>@errors.get("emailError")</td>
+                        }
+                    }
+                </tr>
+                <tr>
+                    <td align="left">
+                        <div class="user-form" id="mobile_field_label">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <strong>@messages("password")</strong> :
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div class="user-form" id="mobile_field_value">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <input type="password" id="mobile" name="password" class="form-control input-lg" required>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    @if(errors.size != 0) {
+                        @if(errors.get("passwordError") != null) {
+                            <td>@errors.get("passwordError")</td>
+                        }
+                    }
+                </tr>
+                <tr>
+                    <td align="left">
+                        <div class="user-form" id="mobile_field_label">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <strong>@messages("mobile")</strong> :
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div class="user-form" id="mobile_field_value">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <input type="tel" id="mobile" name="mobile" value="@userForm("mobile").value" placeholder="Mobile" class="form-control input-lg" required>
                                 </div>
                             </div>
                         </div>
@@ -117,30 +140,5 @@
 
         </fieldset>
     </form>
-
-    <div class="user-display" >
-        <fieldset>
-            <legend align="center"><h3>Registered Users</h3></legend>
-            <table cellspacing="20">
-                <tr>
-                    <th>@messages("userid")</th>
-                    <th>@messages("firstname")</th>
-                    <th>@messages("lastname")</th>
-                    <th>@messages("mobile")</th>
-                    <th>@messages("email")</th>
-                </tr>
-                @for(user <- users){
-                    <tr>
-                        <td>@user.id</td>
-                        <td>@user.firstName</td>
-                        <td>@user.lastName</td>
-                        <td>@user.mobile</td>
-                        <td>@user.email</td>
-                        <td><a href="@routes.UserController.deleteUser(user.id)">delete</a></td>
-                    </tr>
-                }
-            </table>
-        </fieldset>
-    </div>
 
 }

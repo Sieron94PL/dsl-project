@@ -14,4 +14,6 @@ trait UserDAO {
   def delete(id: Long): Future[Int]
 
   def listAll: Future[Seq[User]]
+
+  def findByEmail(email: String): Future[Option[User]]
 }

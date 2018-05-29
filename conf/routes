@@ -19,16 +19,16 @@ GET         /printersFoo                      @controllers.PatternController.pri
 GET         /printersRegex                    @controllers.PatternController.printersRegex
 
 # Tests
-GET         /echo                             @controllers.Application.echo
-GET         /session                          @controllers.Application.session
 
-#User
+# User
 GET         /home                             controllers.UserController.home
 POST        /add                              controllers.UserController.addUser
+POST        /signIn                           controllers.UserController.signIn
 GET         /delete/:id                       controllers.UserController.deleteUser(id : Long)
+GET         /login                            controllers.UserController.login
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                     controllers.Assets.at(path="/public", file)
 
 # Map static resources from the /public folder to the /assets URL path
-GET /assets/*file controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                     controllers.Assets.versioned(path="/public", file: Asset)

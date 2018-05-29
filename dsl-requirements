@@ -1,0 +1,25 @@
+ warunki zaliczenia DSL:
++0,25 za chodzenie za wykład/lab -> 10 spotkań min 5 obecności (50%)
++0,25 za min 1 NIE byle jaki commit / tydzień od rozpoczęcia zajęć laboratoryjnych
+
+3:
+logowanie:
+
+    zakładanie konta z poziomu niezalogowanego użytkownika
+    walidacja na hasło min 5 znaków 1 wielka litera 1 znak specjalny (odpowiedni komunikat)
+    walidacja na unikatowy login
+    relacja jeden do wielu (Master - Detail) relacja pomiędzy dwoma tabelami
+    lista -> przejście w szczegóły (min 1 pole)
+    edycja SWOICH szczegółów
+
+GIT
+
++0,5 zmiana hasła użytkownika
++0,25 ukryte hasła po stronie bazy danych
++0,25 awatar użytkownika (domyślnie dla każdego 1 nie kopiowany) możliwość wrzucenia własnego
++1 admin:
+może zakładać inne konta w tym innych adminów
+może edytować tylko swoje dane
+może kasować konta (walidacja, żeby został min. 1 admin)
++1 kalendarz zajęć podzielony na 7 dni tygodnia godziny 8 - 20:
+walidacja na nakładające się zajęcia, zajęcia posiadają w które można wejść szczegóły: nr. sali i nazwa

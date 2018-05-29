@@ -3,7 +3,7 @@ package services
 import com.google.inject.ImplementedBy
 import models.User
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[UserServiceImpl])
 trait UserService {
@@ -14,4 +14,6 @@ trait UserService {
   def deleteUser(id: Long): Future[Int]
 
   def listAllUsers: Future[Seq[User]]
+
+  def findByEmail(email: String) : Future[Option[User]]
 }

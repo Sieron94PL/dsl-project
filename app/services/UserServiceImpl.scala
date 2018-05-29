@@ -21,4 +21,8 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
   override def listAllUsers: Future[Seq[User]] = {
     userDAO.listAll
   }
+
+  override def findByEmail(email: String): Future[Option[User]] = {
+    userDAO.findByEmail(email)
+  }
 }

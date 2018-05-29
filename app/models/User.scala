@@ -8,7 +8,7 @@ import play.api.data.Forms._
   *
   * @author Steve Chaloner (steve@objectify.be)
   */
-case class User(val id: Long, firstName: String, lastName: String, mobile: Long, email: String) extends Subject {
+case class User(val id: Long, firstName: String, lastName: String, mobile: Long, email: String, password: String) extends Subject {
   override def roles: List[SecurityRole] =
     List(SecurityRole("foo"),
       SecurityRole("bar"))
@@ -19,7 +19,8 @@ case class User(val id: Long, firstName: String, lastName: String, mobile: Long,
   override def identifier: String = id.toString
 }
 
-case class UserFormData(firstName : String, lastName : String , mobile : Long , email : String )
+case class UserFormData(firstName: String, lastName: String, mobile: Long, email: String, password: String)
+
 
 object UserForm {
 
@@ -28,7 +29,8 @@ object UserForm {
       "firstName" -> nonEmptyText,
       "lastName" -> nonEmptyText,
       "mobile" -> longNumber,
-      "email" -> email
+      "email" -> email,
+      "password" -> nonEmptyText
     )(UserFormData.apply)(UserFormData.unapply)
   )
 }

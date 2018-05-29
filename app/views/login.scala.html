@@ -1,10 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>$Title$</title>
-    </head>
-    <body>
-$END$
-    </body>
-</html>
+@(userForm: Form[models.UserFormData])(implicit request: RequestHeader, messages: Messages)
+@main(Messages("app.name")) {
+    @request.flash.get(messages("flash.success")).map { msg =>
+        <div class="col-md-6 col-md-offset-3 alert alert-danger alert-error">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>@msg</strong>
+        </div>
+    }
+    @request.flash.get(messages("flash.error")).map { msg =>
+        <div class="col-md-6 col-md-offset-3 alert alert-danger alert-error">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            <strong>@msg</strong>
+        </div>
+    }
+    <form id="user-data-form" role="form" action='@routes.UserController.signIn()' method="post" class="form-horizontal" align="center" autocomplete="off">
+
+        <fieldset class="user-fieldset">
+
+            <div class="user-form">
+                <label class="form-title" style="color: #F8741B;
+                    font-size: 22px;
+                    font-weight: bold;
+                    text-decoration: none">@messages("login")</label>
+            </div>
+            <br/>
+            <table align="center" cellspacing="20">
+                <tr>
+                    <td align="left">
+                        <div class="user-form" id="email_field_label">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <strong>@messages("email")</strong> :
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div class="user-form" id="email_field_value">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <input type="email" id="email" name="email" placeholder="Email" class="form-control input-lg" required>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <div class="user-form" id="mobile_field_label">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <strong>@messages("password")</strong> :
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div class="user-form" id="mobile_field_value">
+                            <div class="controls col-xs-offset-3 col-xs-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                    <input type="password" id="mobile" name="password" class="form-control input-lg" required>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br/>
+            <div class="form-actions controls ynt-btn-xlarge">
+                <button type="submit" class="btn btn-primary ynt-btn-orange">@messages("sign.in")</button>
+            </div>
+        </fieldset>
+    </form>
+
+
+}

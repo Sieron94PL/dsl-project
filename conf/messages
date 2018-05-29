@@ -3,6 +3,7 @@ app.name = My First Play
 
 #Title
 page.title = User Registration
+login = Login
 
 # Flash Scope
 flash.success = success
@@ -12,5 +13,7 @@ flash.error = error
 userid=UserId
 firstname = FirstName
 lastname = LastName
+password = Password
 mobile = Mobile
 email = Email
+sign.in = Sign in

@@ -27,8 +27,10 @@ class UserDAOImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Us
 
     def email = column[String]("email")
 
+    def password = column[String]("password")
+
     override def * =
-      (id, firstName, lastName, mobile, email) <> (User.tupled, User.unapply)
+      (id, firstName, lastName, mobile, email, password) <> (User.tupled, User.unapply)
   }
 
   implicit val users = TableQuery[UserTable]
@@ -49,5 +51,9 @@ class UserDAOImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Us
 
   override def listAll: Future[Seq[User]] = {
     db.run(users.result)
+  }
+
+  override def findByEmail(email: String): Future[Option[User]] = {
+    db.run(users.filter(_.email === email).result.headOption)
   }
 }
