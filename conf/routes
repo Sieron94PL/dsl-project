@@ -3,7 +3,6 @@
 # ~~~~
 
 # Home page
-GET         /                                 @controllers.Application.index
 GET         /restrict1                        @controllers.RestrictController.restrictOne
 GET         /restrict2                        @controllers.RestrictController.restrictTwo
 GET         /restrict3                        @controllers.RestrictController.restrictThree
@@ -21,11 +20,13 @@ GET         /printersRegex                    @controllers.PatternController.pri
 # Tests
 
 # User
-GET         /home                             controllers.UserController.home
-POST        /add                              controllers.UserController.addUser
-POST        /signIn                           controllers.UserController.signIn
-GET         /delete/:id                       controllers.UserController.deleteUser(id : Long)
-GET         /login                            controllers.UserController.login
+GET         /                                 @controllers.UserController.login
+GET         /registration                     @controllers.UserController.registration
+POST        /add                              @controllers.UserController.addUser
+POST        /signIn                           @controllers.UserController.signIn
+GET         /delete/:id                       @controllers.UserController.deleteUser(id : Long)
+GET         /login                            @controllers.UserController.login
+GET         /user                             @controllers.UserController.user
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                     controllers.Assets.at(path="/public", file)

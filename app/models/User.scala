@@ -19,10 +19,9 @@ case class User(val id: Long, firstName: String, lastName: String, mobile: Long,
   override def identifier: String = id.toString
 }
 
-case class UserFormData(firstName: String, lastName: String, mobile: Long, email: String, password: String)
+case class RegistrationFormData(firstName: String, lastName: String, mobile: Long, email: String, password: String)
 
-
-object UserForm {
+object RegistrationForm {
 
   val form = Form(
     mapping(
@@ -31,9 +30,19 @@ object UserForm {
       "mobile" -> longNumber,
       "email" -> email,
       "password" -> nonEmptyText
-    )(UserFormData.apply)(UserFormData.unapply)
+    )(RegistrationFormData.apply)(RegistrationFormData.unapply)
   )
 }
 
+case class LoginFormData(email: String, password: String)
+
+object LoginForm {
+  val form = Form(
+    mapping(
+      "email" -> email,
+      "password" -> nonEmptyText
+    )(LoginFormData.apply)(LoginFormData.unapply)
+  )
+}
 
 

@@ -2,6 +2,7 @@ body {
     padding-top: 60px;
     padding-bottom: 40px;
 }
+
 .sidebar-nav {
     padding: 9px 0;
 }
@@ -18,5 +19,15 @@ iframe {
 }
 
 div.columnHeader {
-	font-weight: bold;
+    font-weight: bold;
+}
+
+.my-error {
+    text-align: center;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 6px;
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
 }
