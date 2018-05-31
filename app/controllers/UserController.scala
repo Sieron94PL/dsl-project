@@ -1,7 +1,9 @@
 package controllers
 
+import be.objectify.deadbolt.scala.{ActionBuilders, DeadboltActions}
+import be.objectify.deadbolt.scala.cache.HandlerCache
 import com.google.inject.Inject
-import models.{LoginForm, RegistrationForm, User}
+import models.{Book, LoginForm, RegistrationForm, User}
 import play.api.mvc.{Action, Controller, Session}
 import services.UserService
 
@@ -14,7 +16,7 @@ import scala.concurrent.duration._
 import scala.util.matching.Regex
 
 class UserController @Inject()
-(userService: UserService,
+(userService: UserService, deadbolt: DeadboltActions, handlers: HandlerCache, actionBuilder: ActionBuilders,
  val messagesApi: MessagesApi) extends Controller with I18nSupport {
 
   val SPECIAL_CHARACTERS = "[~!@#$^%&*\\(\\)_+={}\\[\\]|;:\"'<,>.?` /\\\\-]"
@@ -26,8 +28,11 @@ class UserController @Inject()
 
   var errors = mutable.HashMap[String, String]()
 
-  def user = Action { implicit request =>
-    Ok(views.html.user())
+  def user = Action.async { implicit request =>
+    userService.getUserBooks(2).map(
+      books => Ok(views.html.user(books))
+    )
+
   }
 
   def login = Action { implicit request =>
@@ -38,18 +43,18 @@ class UserController @Inject()
   def signIn() = Action.async { implicit request =>
     val loginForm = LoginForm.form.bindFromRequest()
     loginForm.fold(
-      errorForm => Future.successful(Ok(views.html.login(errorForm, LOGIN_ERR_MSG))),
+      errorForm => Future(BadRequest(views.html.login(errorForm, LOGIN_ERR_MSG))),
       data => {
         if (Await.result(userService.findByEmail(data.email), 1.second) != None) {
           val user = Await.result(userService.findByEmail(data.email), 1.second).get
           if (user.password == data.password) {
-            Future.successful(Redirect(routes.UserController.user()).withSession("email" -> data.email))
+            Future(Redirect(routes.UserController.user()).withSession("email" -> data.email))
           }
           else {
-            Future.successful(BadRequest(views.html.login(loginForm, LOGIN_ERR_MSG)))
+            Future(Unauthorized(views.html.login(loginForm, LOGIN_ERR_MSG)))
           }
         } else {
-          Future.successful(BadRequest(views.html.login(loginForm, LOGIN_ERR_MSG)))
+          Future(Unauthorized(views.html.login(loginForm, LOGIN_ERR_MSG)))
         }
       })
   }
@@ -64,7 +69,7 @@ class UserController @Inject()
     val registrationForm = RegistrationForm.form.bindFromRequest
 
     registrationForm.fold(
-      errorForm => Future.successful(Ok(views.html.registration(errorForm, errors))),
+      errorForm => Future(BadRequest(views.html.registration(errorForm, errors))),
       data => {
         val newUser = User(0, data.firstName, data.lastName, data.mobile, data.email, data.password)
         errors.clear()

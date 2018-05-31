@@ -2,7 +2,8 @@ package services
 
 import javax.inject.Inject
 import dao.UserDAO
-import models.User
+import models.{Book, User}
+
 import scala.concurrent.Future
 
 class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
@@ -18,11 +19,27 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
     userDAO.get(id)
   }
 
+  override def getBook(id: Long): Future[Option[Book]] = {
+    userDAO.getBook(id)
+  }
+
   override def listAllUsers: Future[Seq[User]] = {
     userDAO.listAll
   }
 
   override def findByEmail(email: String): Future[Option[User]] = {
     userDAO.findByEmail(email)
+  }
+
+  override def addBook(book: Book): Future[String] = {
+    userDAO.addBook(book)
+  }
+
+  override def getUserBooks(id: Long): Future[Seq[Book]] = {
+    userDAO.getUserBooks(id)
+  }
+
+  override def updateBook(book: Book): Unit = {
+    userDAO.updateBook(book)
   }
 }

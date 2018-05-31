@@ -38,7 +38,7 @@ class MyDeadboltHandler @Inject()(userService: UserService, dynamicResourceHandl
 
   def onAuthFailure[A](request: AuthenticatedRequest[A]): Future[Result] = {
     Future {
-      Results.Forbidden(views.html.login)
+      Results.Forbidden(views.html.accessFailed())
     }
   }
 }

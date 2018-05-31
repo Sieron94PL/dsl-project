@@ -1,7 +1,7 @@
 package services
 
 import com.google.inject.ImplementedBy
-import models.User
+import models.{Book, User}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -9,9 +9,17 @@ import scala.concurrent.{ExecutionContext, Future}
 trait UserService {
   def addUser(user: User): Future[String]
 
+  def addBook(book: Book): Future[String]
+
   def getUser(id: Long): Future[Option[User]]
 
+  def getBook(id: Long): Future[Option[Book]]
+
   def deleteUser(id: Long): Future[Int]
+
+  def getUserBooks(id: Long) : Future[Seq[Book]]
+
+  def updateBook(book: Book)
 
   def listAllUsers: Future[Seq[User]]
 
