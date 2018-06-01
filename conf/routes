@@ -26,7 +26,9 @@ POST        /add                              @controllers.UserController.addUse
 POST        /signIn                           @controllers.UserController.signIn
 GET         /delete/:id                       @controllers.UserController.deleteUser(id : Long)
 GET         /login                            @controllers.UserController.login
-GET         /user                             @controllers.UserController.user
+GET         /userBooks                        @controllers.UserController.userBooks
+POST        /addBook                          @controllers.UserController.addBook
+POST        /editBook                         @controllers.UserController.editBook
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                     controllers.Assets.at(path="/public", file)

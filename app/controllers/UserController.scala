@@ -3,8 +3,8 @@ package controllers
 import be.objectify.deadbolt.scala.{ActionBuilders, DeadboltActions}
 import be.objectify.deadbolt.scala.cache.HandlerCache
 import com.google.inject.Inject
-import models.{Book, LoginForm, RegistrationForm, User}
-import play.api.mvc.{Action, Controller, Session}
+import models._
+import play.api.mvc.{Action, Controller}
 import services.UserService
 
 import scala.concurrent.{Await, Future}
@@ -28,27 +28,75 @@ class UserController @Inject()
 
   var errors = mutable.HashMap[String, String]()
 
-  def user = Action.async { implicit request =>
-    userService.getUserBooks(2).map(
-      books => Ok(views.html.user(books))
-    )
+  /*
+  Books
+   */
+  def userBooks = Action.async { implicit request =>
 
+    val email = request.session.get("email").get
+    val user = Await.result(userService.findByEmail(email), Duration.Inf).get
+    val books = Await.result(userService.getUserBooks(user.id), Duration.Inf).seq
+
+    if (request.getQueryString("id") != None) {
+      val bookId = request.getQueryString("id").get.toLong
+      val userBook = Await.result(userService.getBook(bookId), Duration.Inf).get
+      val bookForm = BookForm.form.fill(BookFormData(userBook.title, userBook.category))
+      Future.successful(Ok(views.html.books(books, bookForm, userBook)))
+    } else {
+      println(books)
+      Future(Ok(views.html.books(books, BookForm.form, null)))
+    }
   }
 
+  def addBook = Action.async { implicit request =>
+
+    val email = request.session.get("email").get
+    val user = Await.result(userService.findByEmail(email), Duration.Inf).get
+    val books = Await.result(userService.getUserBooks(user.id), Duration.Inf).seq
+
+    val bookForm = BookForm.form.bindFromRequest()
+    bookForm.fold(
+      errorForm => Future(BadRequest(views.html.books(books, errorForm, null))),
+      data => {
+        val book = Book(0, user.id, data.title, data.category)
+        userService.addBook(book)
+        Future(Redirect(routes.UserController.userBooks()))
+      }
+    )
+  }
+
+  def editBook = Action.async { implicit request =>
+    val email = request.session.get("email").get
+    val user = Await.result(userService.findByEmail(email), Duration.Inf).get
+    val books = Await.result(userService.getUserBooks(user.id), Duration.Inf).seq
+    val bookForm = BookForm.form.bindFromRequest()
+    bookForm.fold(
+      errorForm => Future(BadRequest(views.html.books(books, errorForm, null))),
+      data => {
+        val bookId = request.body.asFormUrlEncoded.get("bookId")(0).toString.toLong
+        val book = Book(bookId, user.id, data.title, data.category)
+        userService.updateBook(book)
+        Future(Redirect(routes.UserController.userBooks()))
+      }
+    )
+  }
+
+  /*
+  Login
+   */
   def login = Action { implicit request =>
     Ok(views.html.login(LoginForm.form, null)).withNewSession
   }
-
 
   def signIn() = Action.async { implicit request =>
     val loginForm = LoginForm.form.bindFromRequest()
     loginForm.fold(
       errorForm => Future(BadRequest(views.html.login(errorForm, LOGIN_ERR_MSG))),
       data => {
-        if (Await.result(userService.findByEmail(data.email), 1.second) != None) {
-          val user = Await.result(userService.findByEmail(data.email), 1.second).get
+        if (Await.result(userService.findByEmail(data.email), Duration.Inf) != None) {
+          val user = Await.result(userService.findByEmail(data.email), Duration.Inf).get
           if (user.password == data.password) {
-            Future(Redirect(routes.UserController.user()).withSession("email" -> data.email))
+            Future(Redirect(routes.UserController.userBooks()).withSession("email" -> data.email))
           }
           else {
             Future(Unauthorized(views.html.login(loginForm, LOGIN_ERR_MSG)))
@@ -59,6 +107,9 @@ class UserController @Inject()
       })
   }
 
+  /*
+  Registration
+   */
   def registration = Action.async { implicit request =>
     userService.listAllUsers map { users =>
       Ok(views.html.registration(RegistrationForm.form, errors))

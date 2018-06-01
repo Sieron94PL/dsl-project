@@ -1,0 +1,60 @@
+@(books: Seq[Book], bookForm: Form[models.BookFormData], book: Book)(implicit request: RequestHeader, messages: Messages)
+@main(Messages("app.name")) {
+
+    @if(request.getQueryString("id") == None) {
+        <form method="post" action='@routes.UserController.addBook()'>
+        } else {
+        <form method="post" action='@routes.UserController.editBook()'>
+            <input type="hidden" name="bookId" value="@book.id">
+            }
+    <table>
+        <tr>
+            <td>Title</td>
+            <td><input type="text" name="title"
+                @if(bookForm("title").value != None) {
+                    value="@bookForm("title").value" } ></td>
+            @if(bookForm != null) {
+                @for(error <- bookForm("title").errors) {
+                    <td class="my-error">@error.messages</td>
+                }
+            }
+        </tr>
+        <tr>
+            <td>Category</td>
+            <td><input type="text" name="category"
+                @if(bookForm("category").value != None) {
+                    value="@bookForm("category").value" } ></td>
+            @if(bookForm != null) {
+                @for(error <- bookForm("category").errors) {
+                    <td class="my-error">@error.messages</td>
+                }
+            }
+        </tr>
+        <tr>
+        @if(request.getQueryString("id") == None) {
+            <td><input type="submit" value="Add book"></td>
+        } else {
+            <td><input type="submit" value="Edit book"></td>
+        }
+        </tr>
+    </table>
+</form>
+
+    @if(books.size != 0) {
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Action</th>
+            </tr>
+            @for(book <- books) {
+                <tr>
+                    <td>@book.id</td>
+                    <td>@book.title</td>
+                    <td>@book.category</td>
+                    <td><a href="userBooks?id=@book.id">Edit</a></td>
+                </tr>
+            } </table>
+    }
+}
