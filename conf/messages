@@ -1,5 +1,6 @@
 # App name
-app.name = My First Play
+app.name = DSL Project
+
 
 #Title
 page.title = User Registration
@@ -10,7 +11,11 @@ flash.success = success
 flash.error = error
 
 #Labels
-userid=UserId
+id = Id
+title = Title
+category = Category
+edit = Edit
+delete = Delete
 firstname = FirstName
 lastname = LastName
 password = Password

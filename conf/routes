@@ -21,6 +21,7 @@ GET         /printersRegex                    @controllers.PatternController.pri
 
 # User
 GET         /                                 @controllers.UserController.login
+GET         /logout                           @controllers.UserController.logout
 GET         /registration                     @controllers.UserController.registration
 POST        /add                              @controllers.UserController.addUser
 POST        /signIn                           @controllers.UserController.signIn
@@ -29,6 +30,7 @@ GET         /login                            @controllers.UserController.login
 GET         /userBooks                        @controllers.UserController.userBooks
 POST        /addBook                          @controllers.UserController.addBook
 POST        /editBook                         @controllers.UserController.editBook
+GET         /deleteBook/:id                   @controllers.UserController.deleteBook(id : Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                     controllers.Assets.at(path="/public", file)

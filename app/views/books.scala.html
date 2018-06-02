@@ -1,6 +1,7 @@
 @(books: Seq[Book], bookForm: Form[models.BookFormData], book: Book)(implicit request: RequestHeader, messages: Messages)
 @main(Messages("app.name")) {
-
+    <a href="/logout">Logout</a>
+    <h1>User books</h1>
     @if(request.getQueryString("id") == None) {
         <form method="post" action='@routes.UserController.addBook()'>
         } else {
@@ -32,28 +33,29 @@
         </tr>
         <tr>
         @if(request.getQueryString("id") == None) {
-            <td><input type="submit" value="Add book"></td>
+            <td><input class="addButton" type="submit" value="Add book"></td>
         } else {
-            <td><input type="submit" value="Edit book"></td>
+            <td><input class="addButton" type="submit" value="Edit book"></td>
         }
         </tr>
     </table>
 </form>
-
     @if(books.size != 0) {
-        <table>
+        <table class="booksTable">
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Action</th>
+                <th>@messages("id")</th>
+                <th>@messages("title")</th>
+                <th>@messages("category")</th>
+                <th>@messages("edit")</th>
+                <th>@messages("delete")</th>
             </tr>
             @for(book <- books) {
                 <tr>
                     <td>@book.id</td>
                     <td>@book.title</td>
                     <td>@book.category</td>
-                    <td><a href="userBooks?id=@book.id">Edit</a></td>
+                    <td><a href="userBooks?id=@book.id">@messages("edit")</a></td>
+                    <td><a href="deleteBook/@book.id">@messages("delete")</a></td>
                 </tr>
             } </table>
     }

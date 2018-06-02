@@ -31,7 +31,7 @@ class UserController @Inject()
   /*
   Books
    */
-  def userBooks = Action.async { implicit request =>
+  def userBooks = deadbolt.SubjectPresent()() { implicit request =>
 
     val email = request.session.get("email").get
     val user = Await.result(userService.findByEmail(email), Duration.Inf).get
@@ -41,7 +41,7 @@ class UserController @Inject()
       val bookId = request.getQueryString("id").get.toLong
       val userBook = Await.result(userService.getBook(bookId), Duration.Inf).get
       val bookForm = BookForm.form.fill(BookFormData(userBook.title, userBook.category))
-      Future.successful(Ok(views.html.books(books, bookForm, userBook)))
+      Future(Ok(views.html.books(books, bookForm, userBook)))
     } else {
       println(books)
       Future(Ok(views.html.books(books, BookForm.form, null)))
@@ -81,11 +81,23 @@ class UserController @Inject()
     )
   }
 
+  def deleteBook(id: Long) = deadbolt.SubjectPresent()() {
+    implicit request =>
+      userService.deleteBook(id) map {
+        res =>
+          Redirect(routes.UserController.userBooks())
+      }
+  }
+
   /*
   Login
    */
-  def login = Action { implicit request =>
-    Ok(views.html.login(LoginForm.form, null)).withNewSession
+  def login = deadbolt.SubjectNotPresent()() { implicit request =>
+    Future(Ok(views.html.login(LoginForm.form, null)))
+  }
+
+  def logout = deadbolt.SubjectPresent()() { implicit request =>
+    Future(Ok(views.html.login(LoginForm.form, null)).withNewSession)
   }
 
   def signIn() = Action.async { implicit request =>
@@ -110,10 +122,8 @@ class UserController @Inject()
   /*
   Registration
    */
-  def registration = Action.async { implicit request =>
-    userService.listAllUsers map { users =>
-      Ok(views.html.registration(RegistrationForm.form, errors))
-    }
+  def registration = deadbolt.SubjectNotPresent()() { implicit request =>
+    Future(Ok(views.html.registration(RegistrationForm.form, errors)))
   }
 
   def addUser() = Action.async { implicit request =>
@@ -156,7 +166,7 @@ class UserController @Inject()
     }
   }
 
-  def deleteUser(id: Long) = Action.async {
+  def deleteUser(id: Long) = deadbolt.SubjectNotPresent()() {
     implicit request =>
       userService.deleteUser(id) map {
         res =>

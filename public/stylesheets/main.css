@@ -3,6 +3,20 @@ body {
     padding-bottom: 40px;
 }
 
+html {
+    font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode,
+    Lucida Sans, Tahoma, sans-serif;
+    width: 100%;
+    height: 100%;
+}
+
+.addButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    font-size: 14px;
+}
+
 .sidebar-nav {
     padding: 9px 0;
 }
@@ -30,4 +44,21 @@ div.columnHeader {
     color: #a94442;
     background-color: #f2dede;
     border-color: #ebccd1;
+}
+
+h1 {
+    text-align: justify;
+    font-family: Rockwell, Courier Bold, Courier, Georgia, Times,
+    Times New Roman, serif;
+}
+
+.booksTable {
+    border-collapse: collapse;
+    align: center;
+}
+
+.booksTable, .booksTable th, .booksTable td {
+    padding: 15px;
+    border: 1px solid black;
+    text-align: center;
 }

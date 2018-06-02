@@ -1,71 +1,72 @@
 @(loginForm: Form[models.LoginFormData], error: String)(implicit request: RequestHeader, messages: Messages)
-@main(Messages("app.name")) {
-    <form id="registration-data-form" role="form" action='@routes.UserController.signIn()' method="post" class="form-horizontal" align="center" autocomplete="off">
-        <fieldset class="registration-fieldset">
-            <div class="registration-form">
-                <label class="form-title" style="color: #F8741B;
-                    font-size: 22px;
-                    font-weight: bold;
-                    text-decoration: none">@messages("login")</label>
-            </div>
-            <br/>
-            <table align="center" cellspacing="20">
-                @if(error != null) {
-                    <tr class="my-error"><td colspan="2">@error</td> </tr>
-                }
-                <tr>
-                    <td align="left">
-                        <div class="registration-form" id="email_field_label">
-                            <div class="controls col-xs-offset-3 col-xs-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
-                                    <strong>@messages("email")</strong> :
+    @main(Messages("app.name")) {
+        <form id="registration-data-form" role="form" action='@routes.UserController.signIn()' method="post" class="form-horizontal" align="center" autocomplete="off">
+            <fieldset class="registration-fieldset">
+                <div class="registration-form">
+                    <label class="form-title" style="color: #F8741B;
+                        font-size: 22px;
+                        font-weight: bold;
+                        text-decoration: none">@messages("login")</label>
+                </div>
+                <br/>
+                <table align="center" cellspacing="20">
+                    @if(error != null) {
+                        <tr class="my-error"><td colspan="2">@error</td> </tr>
+                    }
+                    <tr>
+                        <td align="left">
+                            <div class="registration-form" id="email_field_label">
+                                <div class="controls col-xs-offset-3 col-xs-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
+                                        <strong>@messages("email")</strong> :
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                    <td align="center">
-                        <div class="registration-form" id="email_field_value">
-                            <div class="controls col-xs-offset-3 col-xs-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
-                                    <input type="email" id="email" name="email" value="@loginForm("email").value" placeholder="Email" class="form-control input-lg" required>
+                        </td>
+                        <td align="center">
+                            <div class="registration-form" id="email_field_value">
+                                <div class="controls col-xs-offset-3 col-xs-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
+                                        <input type="email" id="email" name="email" value="@loginForm("email").value" placeholder="Email" class="form-control input-lg" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
 
 
-                <tr>
-                    <td align="left">
-                        <div class="registration-form" id="mobile_field_label">
-                            <div class="controls col-xs-offset-3 col-xs-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
-                                    <strong>@messages("password")</strong> :
+                    <tr>
+                        <td align="left">
+                            <div class="registration-form" id="mobile_field_label">
+                                <div class="controls col-xs-offset-3 col-xs-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
+                                        <strong>@messages("password")</strong> :
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                    <td align="center">
-                        <div class="registration-form" id="mobile_field_value">
-                            <div class="controls col-xs-offset-3 col-xs-9">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
-                                    <input type="password" id="mobile" name="password" class="form-control input-lg" required>
+                        </td>
+                        <td align="center">
+                            <div class="registration-form" id="mobile_field_value">
+                                <div class="controls col-xs-offset-3 col-xs-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-registration"></span></span>
+                                        <input type="password" id="mobile" name="password" class="form-control input-lg" required>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-            <br/>
-            <div class="form-actions controls ynt-btn-xlarge">
-                <button type="submit" class="btn btn-primary ynt-btn-orange">@messages("sign.in")</button>
-            </div>
-        </fieldset>
-    </form>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <div style="position: center;">
+                    <button type="submit" class="addButton">@messages("sign.in")</button>
+                    <button type="button" class="addButton" onclick="window.location = '/registration'">Registration</button>
+                </div>
+            </fieldset>
+        </form>
 
 
-}
+    }

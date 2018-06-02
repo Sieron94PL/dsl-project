@@ -17,6 +17,8 @@ trait UserService {
 
   def deleteUser(id: Long): Future[Int]
 
+  def deleteBook(id: Long): Future[Int]
+
   def getUserBooks(id: Long) : Future[Seq[Book]]
 
   def updateBook(book: Book)

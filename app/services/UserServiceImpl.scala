@@ -42,4 +42,8 @@ class UserServiceImpl @Inject()(userDAO: UserDAO) extends UserService {
   override def updateBook(book: Book): Unit = {
     userDAO.updateBook(book)
   }
+
+  override def deleteBook(id: Long): Future[Int] = {
+    userDAO.deleteBook(id)
+  }
 }
